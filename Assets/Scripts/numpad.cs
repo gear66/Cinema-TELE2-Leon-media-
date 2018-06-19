@@ -44,7 +44,12 @@ public class numpad : MonoBehaviour
     }
     public void ClearName()
     {
-        namee.text = "Client";
+        namee.text = "Clien12312t";
+    }
+
+    public void Sosat()
+    {
+        Debug.Log("sosat");
     }
 
     public void PlusMin()
