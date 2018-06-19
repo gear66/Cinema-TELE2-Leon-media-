@@ -11,11 +11,11 @@ public class Payload
     [JsonProperty("target")]
     public string target { get; set; }
 
-    [JsonProperty("onlineVid")]
-    public bool onlineVid { get; set; }
+    [JsonProperty("onlineVideo")]
+    public bool onlineVideo { get; set; }
 
-    [JsonProperty("lobby")]
-    public string lobby { get; set; }
+    [JsonProperty("lobbyName")]
+    public string lobbyName { get; set; }
 
     [JsonProperty("speedTest")]
     public float speedTest { get; set; }

@@ -95,7 +95,7 @@ public class devSett : MonoBehaviour
                     Payload payload = new Payload();
                     payload.stateData = playerData.text;
 
-                    LobbyManager.playerCommands["refreshData"](payload);
+                    LobbyManager.requests["refreshData"](payload);
                 }
 
                 if (check > 9)

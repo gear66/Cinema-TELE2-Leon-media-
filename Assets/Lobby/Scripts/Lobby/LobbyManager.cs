@@ -65,8 +65,8 @@ namespace Prototype.NetworkLobby
         private bool startDemo = false;
 
         public static Dictionary<string, RectTransform> screens;
-        public static Dictionary<string, Action<Payload>> serverCommands;
-        public static Dictionary<string, Action<Payload>> playerCommands;
+        public static Dictionary<string, Action<Payload>> responses;
+        public static Dictionary<string, Action<Payload>> requests;
         public static Dictionary<string, Action<Payload>> adminCommands;
         public static Dictionary<string, Dictionary<string, Action<Payload>>> commandsSet;
 
@@ -74,25 +74,30 @@ namespace Prototype.NetworkLobby
         public float max;
         public bool diapasonSet = false;
         public bool toggling = false;
-        public bool toggle = true;
+        public bool onlineVideo = true;
 
         private void Update()
         {
             if (startDemo)
             {
-                playerCommands["beginDemo"](new Payload());
+                Debug.Log("GO DEMO");
+                engine = GameObject.Find("ENGINE");
+                engine.GetComponent<engineClient>().StartDemo();
                 startDemo = false;
             }
 
             if (diapasonSet)
             {
-                playerCommands["setMinMax"](new Payload());
+                Debug.Log("Setting diapason");
+                numpad.GetComponent<speedtest>().speedMin = min;
+                numpad.GetComponent<speedtest>().speedMax = max;
                 diapasonSet = false;
             }
 
             if (toggling)
             {
-                playerCommands["toggleOnline"](new Payload());
+                engine = GameObject.Find("ENGINE");
+                engine.GetComponent<engineClient>().OnlineVideo(onlineVideo);
                 toggling = false;
             }
         }
@@ -100,28 +105,13 @@ namespace Prototype.NetworkLobby
         void Start()
         {
             s_Singleton = this;
-            _lobbyHooks = GetComponent<Prototype.NetworkLobby.LobbyHook>();
+            _lobbyHooks = GetComponent<LobbyHook>();
             currentPanel = mainMenuPanel;
 
             backButton.gameObject.SetActive(false);
             GetComponent<Canvas>().enabled = true;
-
-            adminCommands = new Dictionary<string, Action<Payload>> {
-                { "playerConnected", (payload) => {
-                        User user = payload.user;
-                        GameObject obj = Instantiate(lobbyPlayerPrefab.gameObject) as GameObject;
-
-                        LobbyPlayer newPlayer = obj.GetComponent<LobbyPlayer>();
-
-                        newPlayer.playerName = user.userName;
-                        newPlayer.nameInput.text = user.userName;
-
-                        LobbyPlayerList._instance.AddPlayer(newPlayer);
-                    }
-                }
-            };
-
-            playerCommands = new Dictionary<string, Action<Payload>> {
+            
+            requests = new Dictionary<string, Action<Payload>> {
                 { "refreshData", (payload) => {
                         Debug.Log("Calling refresh data");
                         User user = new User();
@@ -130,17 +120,13 @@ namespace Prototype.NetworkLobby
 
                         Payload newPayload = new Payload();
                         newPayload.user = user;
-                        newPayload.lobby = LobbyName;
+                        newPayload.lobbyName = LobbyName;
                         newPayload.stateData = payload.stateData;
-
-                        Command command = new Command();
-                        command.setType = "playerCommands";
-                        command.command = "refreshData";
 
                         Message message = new Message();
                         message.payload = newPayload;
-                        message.command = command;
-                        message.user = user;
+                        message.command = "refreshData";
+                        message.isRequset = true;
 
                         string json = JsonConvert.SerializeObject(message);
                         ws.Send(json);
@@ -150,27 +136,10 @@ namespace Prototype.NetworkLobby
                         startDemo = true;
                     }
                 },
-                { "toggleOnline", (payload) => {
-                    engine = GameObject.Find("ENGINE");
-                    engine.GetComponent<engineClient>().OnlineVideo(toggle);
-                    }
-                },
-                { "toggleOnlineVid", (payload) => {
-                    Debug.Log("Toggler called");
-                    toggling = true;
-                    toggle = payload.onlineVid;
-                    }
-                },
-                { "beginDemo", (payload) => {
-                        Debug.Log("GO DEMO");
-                        engine = GameObject.Find("ENGINE");
-                        engine.GetComponent<engineClient>().StartDemo();
-                    }
-                },
-                { "setMinMax", (payload) => {
-                        Debug.Log("Setting diapason");
-                        numpad.GetComponent<speedtest>().speedMin = min;
-                        numpad.GetComponent<speedtest>().speedMax = max;
+                { "toggleOnlineVideo", (payload) => {
+                        Debug.Log("Toggler called");
+                        toggling = true;
+                        onlineVideo = payload.onlineVideo;
                     }
                 },
                 { "onSpeedTest", (payload) => {
@@ -182,7 +151,19 @@ namespace Prototype.NetworkLobby
                 }
             };
 
-            serverCommands = new Dictionary<string, Action<Payload>> {
+            responses = new Dictionary<string, Action<Payload>> {
+                { "playerConnected", (payload) => {
+                        User user = payload.user;
+                        GameObject obj = Instantiate(lobbyPlayerPrefab.gameObject) as GameObject;
+
+                        LobbyPlayer newPlayer = obj.GetComponent<LobbyPlayer>();
+
+                        newPlayer.playerName = user.userName;
+                        newPlayer.nameInput.text = user.userName;
+
+                        LobbyPlayerList._instance.AddPlayer(newPlayer);
+                    }
+                },
                 { "joinLobby", (payload) => {
 
                         User user = new User();
@@ -191,15 +172,11 @@ namespace Prototype.NetworkLobby
 
                         Payload newPayload = new Payload();
                         newPayload.user = user;
-                        newPayload.lobby = LobbyName;
-
-                        Command command = new Command();
-                        command.setType = "serverCommands";
-                        command.command = "joinLobby";
+                        newPayload.lobbyName = LobbyName;
 
                         Message message = new Message();
                         message.payload = newPayload;
-                        message.command = command;
+                        message.command = "joinLobby";
 
                         string json = JsonConvert.SerializeObject(message);
                         ws.Send(json);
@@ -213,9 +190,8 @@ namespace Prototype.NetworkLobby
             };
 
             commandsSet = new Dictionary<string, Dictionary<string, Action<Payload>>> {
-                { "playerCommands", playerCommands },
-                { "adminCommands", adminCommands },
-                { "serverCommands", serverCommands }
+                { "requests", requests },
+                { "responses", responses }
             };
 
             //ws = new WebSocket("ws://localhost:8999");
@@ -229,23 +205,19 @@ namespace Prototype.NetworkLobby
             Payload initPayload = new Payload();
             initPayload.user = admin;
 
-            Command newCommand = new Command();
-            newCommand.setType = "serverCommands";
-            newCommand.command = "reg";
-
             Message newMessage = new Message();
-            newMessage.command = newCommand;
+            newMessage.command = "reg";
             newMessage.payload = initPayload;
 
             string jsonAdmin = JsonConvert.SerializeObject(newMessage);
             ws.OnMessage += (sender, e) => {
                 Message message = JsonConvert.DeserializeObject<Message>(e.Data);
                 Debug.Log(message);
-                Command command = message.command;
 
-                Dictionary<string, Action<Payload>> currentCommandSet = commandsSet[command.setType];
+                Dictionary<string, Action<Payload>> currentCommandSet 
+                    = commandsSet[message.isRequset ? "requests" : "responses" ];
 
-                currentCommandSet[command.command](message.payload);
+                currentCommandSet[message.command](message.payload);
             };
 
             ws.Connect();
@@ -321,7 +293,7 @@ namespace Prototype.NetworkLobby
 
         public void ConnectToLobby()
         {
-            serverCommands["joinLobby"](new Payload());
+            responses["joinLobby"](new Payload());
 
             User admin = new User();
             admin.userType = "Player";

@@ -44,7 +44,7 @@ public class numpad : MonoBehaviour
     }
     public void ClearName()
     {
-        namee.text = "Clien12312t";
+        namee.text = "Client";
     }
 
     public void Sosat()
