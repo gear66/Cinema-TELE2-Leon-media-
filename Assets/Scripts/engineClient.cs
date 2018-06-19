@@ -202,6 +202,14 @@ public class engineClient : MonoBehaviour {
                 GoCinema();
                 Debug.Log("Returned to cinema with flag vvv " + flag);
             }
+            if (currentVideo != null)
+            {
+                duration = (float)currentVideo.GetComponent<VideoPlayer>().time;
+            }
+            else if (currentVideoLocal != null)
+            {
+                duration = (float)currentVideoLocal.GetComponent<VideoPlayerInitializer>().totalTime - (float)currentVideoLocal.GetComponent<VideoPlayer>().time;
+            }
         }
     }
 

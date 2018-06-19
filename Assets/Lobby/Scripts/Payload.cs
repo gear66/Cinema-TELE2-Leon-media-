@@ -5,6 +5,9 @@ public class Payload
     [JsonProperty("stateData")]
     public string stateData { get; set; }
 
+    [JsonProperty("duration")]
+    public float duration { get; set; }
+
     [JsonProperty("user")]
     public User user { get; set; }
 

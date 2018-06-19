@@ -19,6 +19,7 @@ public class devSett : MonoBehaviour
     string wifiInfo;
     public string state;
     public float t;
+    public float tt;
     public float check;
     public bool isActive = true;
     public bool isServer;
@@ -40,9 +41,17 @@ public class devSett : MonoBehaviour
     void Update()
     {
         t += Time.deltaTime;
+        tt += Time.deltaTime;
         if (isActive)
         {
             duration = engine.GetComponent<engineClient>().duration;
+            if (tt > 1)
+            {
+                Payload payload = new Payload();
+                payload.duration = duration;
+                LobbyManager.requests["SendDuration"](payload);
+                tt = 0;
+            }
             if (t > 3)
             {
                 //check += 1;
@@ -87,10 +96,10 @@ public class devSett : MonoBehaviour
                         vidStat = "Offline";
                     }
                     vidStat = engine.GetComponent<engineClient>().isReal.ToString();
-                    output = ("Battery: " + AGBattery.GetBatteryChargeLevel() + " | " + status + " | " + state + check.ToString() + " " + vidStat);
+
+                    output = ("Battery: " + AGBattery.GetBatteryChargeLevel() + " | " + status + " | " + state + check.ToString() + "c " + vidStat + " " + duration.ToString());
                     playerData.text = output;
-                    Debug.Log("Calling refresh data");
-                    Debug.Log(output);
+                    Debug.Log("Calling refresh data " + output);
 
                     Payload payload = new Payload();
                     payload.stateData = playerData.text;

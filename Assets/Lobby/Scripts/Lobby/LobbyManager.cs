@@ -126,12 +126,31 @@ namespace Prototype.NetworkLobby
                         Message message = new Message();
                         message.payload = newPayload;
                         message.command = "refreshData";
-                        message.isRequset = true;
 
                         string json = JsonConvert.SerializeObject(message);
                         ws.Send(json);
                     }
                 },
+                { "duration", (payload) => {
+                        Debug.Log("Calling refresh data");
+                        User user = new User();
+                        user.userName = UserName;
+                        user.userType = "Player";
+
+                        Payload newPayload = new Payload();
+                        newPayload.user = user;
+                        newPayload.lobbyName = LobbyName;
+                        newPayload.duration = payload.duration;
+
+                        Message message = new Message();
+                        message.payload = newPayload;
+                        message.command = "duration";
+
+                        string json = JsonConvert.SerializeObject(message);
+                        ws.Send(json);
+                    }
+                },
+
                 { "startDemo", (payload) => {
                         startDemo = true;
                     }
