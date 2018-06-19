@@ -20,6 +20,7 @@ public class engineClient : MonoBehaviour {
     public float duration;
     public float t = 5;
     bool ok;
+    public string currentState;
     int vidNum;
 
     [Header("Videos:")]
@@ -79,6 +80,7 @@ public class engineClient : MonoBehaviour {
     // Use this for initialization
     void Start () {
         ok = false;
+        currentState = "SETTS";
         flag = 0;
         ipData.text = PlayerPrefs.GetString("IP", "");
         nameData.text = PlayerPrefs.GetString("setName", "Client");
@@ -271,12 +273,8 @@ public class engineClient : MonoBehaviour {
         {
             currentVideo = Instantiate(videossOnline[i - 1]);
             currentVideo.SetActive(true);
-            //currentVideo.GetComponent<HighQualityPlayback>().Play();
             Debug.Log("Video "+ i +" online instantiated vvv");
-
-            //videossOnline[i - 1].SetActive(t rue);
-            //videossOnline[i - 1].GetComponent<HighQualityPlayback>().Play() ;
-            //Debug.Log(i + " online selected, play started");
+            currentState = "Watch " + i.ToString();
         }
         else
         {
@@ -284,9 +282,7 @@ public class engineClient : MonoBehaviour {
             currentVideoLocal.SetActive(true);
             currentVideoLocal.GetComponent<VideoPlayerInitializer>().setFrame = 0;
             Debug.Log("Video " + i + " offline instantiated vvv");
-            //videoss[i - 1].SetActive(true);
-            //videoss[i - 1].GetComponent<VideoPlayer>().Play();
-            //videoss[i - 1].GetComponent<MediaPlayerCtrl>().Play();
+            currentState = "Watch " + i.ToString();
         }
     }
 
@@ -320,6 +316,7 @@ public class engineClient : MonoBehaviour {
         browBlock.SetActive(true);
         browserColl2.SetActive(true);
         gazee.SetActive(true);
+        currentState = "Cinema";
         Debug.Log("GoCinema called with flag vvv "+ flag);
         //main.enabled = true;
     }

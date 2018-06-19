@@ -13,11 +13,8 @@ public class devSett : MonoBehaviour
 {
 
     public string output;
-    //public Text playertextbox;
-
     string status;
     string wifiInfo;
-    public string state;
     public float t;
     public float tt;
     public float check;
@@ -27,16 +24,12 @@ public class devSett : MonoBehaviour
     public GameObject engine;
     public float duration;
     public string vidStat;
+    public string currentState;
 
-    // Use this for initialization
     void Start()
     {
-        state = "";
         playerData.text = ("Статус:");
     }
-
-    //[SyncVar(hook = "OnMyData")]
-    //public string sunk2;
 
     void Update()
     {
@@ -50,11 +43,11 @@ public class devSett : MonoBehaviour
                 Payload payload = new Payload();
                 payload.duration = duration;
                 LobbyManager.requests["SendDuration"](payload);
+                currentState = engine.GetComponent<engineClient>().currentState;
                 tt = 0;
             }
             if (t > 3)
             {
-                //check += 1;
                 check = engine.GetComponent<engineClient>().flag;
                 if (AGNetwork.IsInternetAvailable())
                 {
@@ -97,7 +90,7 @@ public class devSett : MonoBehaviour
                     }
                     vidStat = engine.GetComponent<engineClient>().isReal.ToString();
 
-                    output = ("Battery: " + AGBattery.GetBatteryChargeLevel() + " | " + status + " | " + state + check.ToString() + "c " + vidStat + " " + duration.ToString());
+                    output = ("Battery: " + AGBattery.GetBatteryChargeLevel() + " | " + status + " | " + currentState + check.ToString() + "c " + vidStat + " " + duration.ToString());
                     playerData.text = output;
                     Debug.Log("Calling refresh data " + output);
 
@@ -115,5 +108,4 @@ public class devSett : MonoBehaviour
             }
         }
     }
-
 }
