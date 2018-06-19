@@ -25,5 +25,5 @@
 /.vs/Cinema TELE2 (Leon media)/DesignTimeBuild
 *.sln
 *.csproj
-/obj/Debug
+/obj
 
