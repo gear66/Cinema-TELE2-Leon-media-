@@ -80,11 +80,11 @@ public class devSett : MonoBehaviour
                 {
                     if (engine.GetComponent<engineClient>().isReal)
                     {
-                        vidStat = "Онл";
+                        vidStat = "Online";
                     }
                     else
                     {
-                        vidStat = "Оффл";
+                        vidStat = "Offline";
                     }
                     vidStat = engine.GetComponent<engineClient>().isReal.ToString();
                     output = ("Battery: " + AGBattery.GetBatteryChargeLevel() + " | " + status + " | " + state + check.ToString() + " " + vidStat);
