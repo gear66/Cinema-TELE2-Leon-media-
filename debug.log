@@ -1,0 +1,4 @@
+[0518/164647:WARNING:quota_manager.cc(220)] Create directory failed for path
+[0518/164647:WARNING:quota_manager.cc(220)] Create directory failed for path
+[0518/164649:ERROR:gpu_video_decode_accelerator.cc(282)] HW video decode not available for profile 12
+[0518/165837:ERROR:gpu_video_decode_accelerator.cc(282)] HW video decode not available for profile 12

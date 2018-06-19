@@ -1,0 +1,25 @@
+﻿################################################################################
+# Данный GITIGNORE-файл был автоматически создан Microsoft(R) Visual Studio.
+################################################################################
+
+/.collabignore
+*.mp4
+/BUILDS
+/Library
+/Temp
+/ProjectSettings
+*.png
+*.meta
+*.mp3
+/Assets/EasyMovieTexture/AndroidSource
+*.jpg
+/Assets/LightShaft/EasyMovieTextureYoutube
+/Assets/LightShaft/Standard Assets/Characters
+/Assets/LightShaft/Standard Assets/Cameras
+/Assets/LightShaft/Standard Assets
+*.psd
+/Assets/VR Nurface/DemoAssets/Audio
+/Assets/VR Nurface/DemoAssets/Animations
+/Assets/VR Nurface/DemoAssets/Materials
+/.vs/Cinema TELE2 (Leon media)/v15
+/.vs/Cinema TELE2 (Leon media)/DesignTimeBuild
