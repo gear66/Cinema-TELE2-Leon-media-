@@ -119,7 +119,7 @@ namespace Prototype.NetworkLobby
                 string json = JsonConvert.SerializeObject(regMessage);
                 ws.Send(json);
 
-                infoPanel.Display("Подождите, идет подключение к комнате...", null, () => { });
+                infoPanel.Display("При долгом ожидании ответа попробуйте подключиться еще раз", null, () => { });
 
                 requests["joinLobby"](payload);
 
