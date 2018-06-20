@@ -285,8 +285,8 @@ namespace Prototype.NetworkLobby
         public void ConnectToLobby()
         {
 
-            ws = new WebSocket("ws://localhost:8999");
-            //ws = new WebSocket("ws://cinematele2.herokuapp.com/");
+            //ws = new WebSocket("ws://localhost:8999");
+            ws = new WebSocket("ws://cinematele2.herokuapp.com/");
 
             User user = new User();
             user.userName = UserName1.text;

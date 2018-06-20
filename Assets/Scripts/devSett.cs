@@ -90,7 +90,7 @@ public class devSett : MonoBehaviour
                     }
                     vidStat = engine.GetComponent<engineClient>().isReal.ToString();
 
-                    output = ("Battery: " + AGBattery.GetBatteryChargeLevel() + " | " + status + " | " + currentState + check.ToString() + "c " + vidStat + " " + duration.ToString());
+                    output = ("Battery: " + AGBattery.GetBatteryChargeLevel() + " | " + status + " | " + currentState + " " + vidStat + " " + duration.ToString());
                     playerData.text = output;
                     Debug.Log("Calling refresh data " + output);
 
