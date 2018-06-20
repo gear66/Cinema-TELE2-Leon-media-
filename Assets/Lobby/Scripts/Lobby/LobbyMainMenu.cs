@@ -33,16 +33,8 @@ namespace Prototype.NetworkLobby
 
         public void OnClickJoin()
         {
-            lobbyManager.ChangeTo(lobbyPanel);
             lobbyManager.ConnectToLobby();
 
-            //lobbyManager.networkAddress = ipInput.text;
-            //lobbyManager.StartClient();
-
-            //lobbyManager.backDelegate = lobbyManager.StopClientClbk;
-            //lobbyManager.DisplayIsConnecting();
-
-            //lobbyManager.SetServerInfo("Connecting...", lobbyManager.networkAddress);
         }
 
         public void OnClickDedicated()

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
@@ -29,7 +29,7 @@ namespace Prototype.NetworkLobby
         [Header("UI Reference")]
         public LobbyTopPanel topPanel;
         public string UserName = "Client";
-        public string LobbyName = "1";
+        public string LobbyName;
 
         public RectTransform mainMenuPanel;
         public RectTransform lobbyPanel;
@@ -65,16 +65,18 @@ namespace Prototype.NetworkLobby
         private bool startDemo = false;
 
         public static Dictionary<string, RectTransform> screens;
-        public static Dictionary<string, Action<Payload>> responses;
+        public static Dictionary<string, Action<Message>> responses;
         public static Dictionary<string, Action<Payload>> requests;
-        public static Dictionary<string, Action<Payload>> adminCommands;
-        public static Dictionary<string, Dictionary<string, Action<Payload>>> commandsSet;
 
         public float min;
         public float max;
         public bool diapasonSet = false;
         public bool toggling = false;
         public bool onlineVideo = true;
+
+        public bool joinedLobby = false;
+        public bool joinedLobbyError = false;
+        public string joinedLobbyErrorMessage;
 
         private void Update()
         {
@@ -99,6 +101,17 @@ namespace Prototype.NetworkLobby
                 engine = GameObject.Find("ENGINE");
                 engine.GetComponent<engineClient>().OnlineVideo(onlineVideo);
                 toggling = false;
+            }
+
+            if (joinedLobby)
+            {
+                ConnectedToLobby();
+                joinedLobby = false;
+            }
+
+            if (joinedLobbyError)
+            {
+                infoPanel.Display(joinedLobbyErrorMessage, "Вернуться", () => { LobbyManager.s_Singleton.infoPanel.gameObject.SetActive(false); });
             }
         }
 
@@ -148,34 +161,10 @@ namespace Prototype.NetworkLobby
                         max = payload.speedTest * 2 + 2;
                         diapasonSet = true;
                     }
-                }
-            };
-
-            responses = new Dictionary<string, Action<Payload>> {
-                { "playerConnected", (payload) => {
-                        User user = payload.user;
-                        GameObject obj = Instantiate(lobbyPlayerPrefab.gameObject) as GameObject;
-
-                        LobbyPlayer newPlayer = obj.GetComponent<LobbyPlayer>();
-
-                        newPlayer.playerName = user.userName;
-                        newPlayer.nameInput.text = user.userName;
-
-                        LobbyPlayerList._instance.AddPlayer(newPlayer);
-                    }
                 },
                 { "joinLobby", (payload) => {
-
-                        User user = new User();
-                        user.userName = UserName;
-                        user.userType = "Player";
-
-                        Payload newPayload = new Payload();
-                        newPayload.user = user;
-                        newPayload.lobbyName = LobbyName;
-
                         Message message = new Message();
-                        message.payload = newPayload;
+                        message.payload = payload;
                         message.command = "joinLobby";
 
                         string json = JsonConvert.SerializeObject(message);
@@ -184,45 +173,24 @@ namespace Prototype.NetworkLobby
                 }
             };
 
+            responses = new Dictionary<string, Action<Message>> { 
+                { "joinLobby", (message) => {
+                        if (message.success) {
+                            joinedLobby = true;
+                        } else {
+                            joinedLobbyError = true;
+                            joinedLobbyErrorMessage = message.error;
+                        }
+                    }
+                }
+
+            };
+
             screens = new Dictionary<string, RectTransform> {
                 { "mainMenu", s_Singleton.mainMenuPanel},
                 { "lobby", s_Singleton.lobbyPanel }
             };
-
-            commandsSet = new Dictionary<string, Dictionary<string, Action<Payload>>> {
-                { "requests", requests },
-                { "responses", responses }
-            };
-
-            //ws = new WebSocket("ws://localhost:8999");
-            ws = new WebSocket("ws://cinematele2.herokuapp.com/");
-
-
-            User admin = new User();
-            admin.userType = "Player";
-            admin.userName = UserName;
-
-            Payload initPayload = new Payload();
-            initPayload.user = admin;
-
-            Message newMessage = new Message();
-            newMessage.command = "reg";
-            newMessage.payload = initPayload;
-
-            string jsonAdmin = JsonConvert.SerializeObject(newMessage);
-            ws.OnMessage += (sender, e) => {
-                Message message = JsonConvert.DeserializeObject<Message>(e.Data);
-                Debug.Log(message);
-
-                Dictionary<string, Action<Payload>> currentCommandSet 
-                    = commandsSet[message.isRequset ? "requests" : "responses" ];
-
-                currentCommandSet[message.command](message.payload);
-            };
-
-            ws.Connect();
-            ws.Send(jsonAdmin);
-
+            
             DontDestroyOnLoad(gameObject);
 
             SetServerInfo("Offline", "None");
@@ -293,16 +261,81 @@ namespace Prototype.NetworkLobby
 
         public void ConnectToLobby()
         {
-            responses["joinLobby"](new Payload());
 
-            User admin = new User();
-            admin.userType = "Player";
-            admin.userName = UserName;
+            ws = new WebSocket("ws://localhost:8999");
+            //ws = new WebSocket("ws://cinematele2.herokuapp.com/");
 
-            Payload initPayload = new Payload();
-            initPayload.user = admin;
+            User user = new User();
+            user.userName = UserName;
+            user.userType = "Player";
 
-            LobbyPlayerList._instance.AddPlayer(GetPlayer(initPayload));
+            Payload payload = new Payload();
+            payload.user = user;
+            payload.lobbyName = LobbyName;
+
+            InitConnection();
+
+            if (!ws.IsAlive)
+            {
+                infoPanel.Display("Сервер в данный момент не доступен",
+                    "Вернуться", () => { ChangeTo(mainMenuPanel); });
+
+                return;
+            }
+
+            infoPanel.Display("Подождите, идет подключение к комнате...", null, () => { });
+
+            requests["joinLobby"](payload);
+        }
+
+        private void InitConnection()
+        {
+            User user = new User();
+            user.userName = UserName;
+            user.userType = "Player";
+
+            Payload payload = new Payload();
+            payload.user = user;
+            payload.lobbyName = LobbyName;
+
+            ws.OnMessage += (sender, e) => {
+                Message message = JsonConvert.DeserializeObject<Message>(e.Data);
+                Debug.Log(message);
+
+                if (message.isRequset)
+                {
+                    requests[message.command](message.payload);
+                }
+                else
+                {
+                    responses[message.command](message);
+                }
+            };
+
+            ws.Connect();
+
+            Message regMessage = new Message();
+            regMessage.payload = payload;
+            regMessage.command = "reg";
+
+            string json = JsonConvert.SerializeObject(regMessage);
+            ws.Send(json);
+
+        }
+
+        public void ConnectedToLobby()
+        {
+
+            infoPanel.gameObject.SetActive(false);
+            ChangeTo(lobbyPanel);
+            User user = new User();
+            user.userName = UserName;
+
+            Payload payload = new Payload();
+            payload.user = user;
+            payload.lobbyName = LobbyName;
+
+            LobbyPlayerList._instance.AddPlayer(GetPlayer(payload));
         }
 
         public void ChangeTo(RectTransform newPanel)

@@ -7,4 +7,7 @@ public class User
 
     [JsonProperty("userName")]
     public string userName { get; set; }
+
+    [JsonProperty("toggleState")]
+    public bool toggleState { get; set; }
 }
