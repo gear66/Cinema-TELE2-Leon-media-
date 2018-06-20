@@ -114,6 +114,7 @@ namespace Prototype.NetworkLobby
                 Payload payload = new Payload();
                 payload.user = user;
                 payload.lobbyName = LobbyName1.text;
+                payload.onlineVideo = !onlineVideo;
 
                 requests["toggleOnlineVideoConfirm"](payload);
             }
@@ -193,6 +194,7 @@ namespace Prototype.NetworkLobby
                         Message message = new Message();
                         message.payload = payload;
                         message.command = "toggleOnlineVideoConfirm";
+                        message.isRequest = true;
 
                         string json = JsonConvert.SerializeObject(message);
                         ws.Send(json);
