@@ -177,7 +177,6 @@ namespace Prototype.NetworkLobby
                         ws.Send(json);
                     }
                 },
-
                 { "startDemo", (payload) => {
                         startDemo = true;
                     }
