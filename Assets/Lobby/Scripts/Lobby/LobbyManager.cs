@@ -101,6 +101,8 @@ namespace Prototype.NetworkLobby
                 onConnect = false;
                 connected = true;
 
+                infoPanel.gameObject.SetActive(false);
+
                 User user = new User();
                 user.userName = UserName1.text;
                 user.userType = "Player";
@@ -349,10 +351,10 @@ namespace Prototype.NetworkLobby
         public void ConnectToLobby()
         {
 
-            ws = new WebSocket("ws://localhost:8999");
-            //ws = new WebSocket("ws://cinematele2.herokuapp.com/");
+            //ws = new WebSocket("ws://localhost:8999");
+            ws = new WebSocket("ws://cinematele2.herokuapp.com/");
 
-            
+
             InitConnection();
 
             //if (!ws.IsAlive)
@@ -395,6 +397,8 @@ namespace Prototype.NetworkLobby
             };
 
             ws.ConnectAsync();
+
+            infoPanel.Display("Подключаемся к серверу...", "Оменить", null);
 
         }
 
