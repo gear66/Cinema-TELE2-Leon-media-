@@ -26,6 +26,7 @@ namespace Prototype.NetworkLobby
             singleButton.onClick.AddListener(() => { gameObject.SetActive(false); });
             gameObject.SetActive(true);
         }
+
         public void Resett()
         {
             SceneManager.LoadScene("cinema");

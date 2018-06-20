@@ -42,7 +42,7 @@ public class devSett : MonoBehaviour
             {
                 Payload payload = new Payload();
                 payload.duration = duration;
-                LobbyManager.requests["SendDuration"](payload);
+                LobbyManager.requests["sendDuration"](payload);
                 currentState = engine.GetComponent<engineClient>().currentState;
                 tt = 0;
             }

@@ -31,6 +31,9 @@ namespace Prototype.NetworkLobby
         public string UserName = "Client";
         public string LobbyName;
 
+        public InputField LobbyName1;
+        public InputField UserName1;
+
         public RectTransform mainMenuPanel;
         public RectTransform lobbyPanel;
 
@@ -111,7 +114,8 @@ namespace Prototype.NetworkLobby
 
             if (joinedLobbyError)
             {
-                infoPanel.Display(joinedLobbyErrorMessage, "Вернуться", () => { LobbyManager.s_Singleton.infoPanel.gameObject.SetActive(false); });
+                infoPanel.Display(joinedLobbyErrorMessage, "Вернуться", null);
+                joinedLobbyError = false;
             }
         }
 
@@ -144,7 +148,7 @@ namespace Prototype.NetworkLobby
                         ws.Send(json);
                     }
                 },
-                { "duration", (payload) => {
+                { "sendDuration", (payload) => {
                         Debug.Log("Calling refresh data");
                         User user = new User();
                         user.userName = UserName;
@@ -285,12 +289,12 @@ namespace Prototype.NetworkLobby
             //ws = new WebSocket("ws://cinematele2.herokuapp.com/");
 
             User user = new User();
-            user.userName = UserName;
+            user.userName = UserName1.text;
             user.userType = "Player";
 
             Payload payload = new Payload();
             payload.user = user;
-            payload.lobbyName = LobbyName;
+            payload.lobbyName = LobbyName1.text;
 
             InitConnection();
 
@@ -321,7 +325,7 @@ namespace Prototype.NetworkLobby
                 Message message = JsonConvert.DeserializeObject<Message>(e.Data);
                 Debug.Log(message);
 
-                if (message.isRequset)
+                if (message.isRequest)
                 {
                     requests[message.command](message.payload);
                 }

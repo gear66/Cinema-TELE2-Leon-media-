@@ -3754,6 +3754,8 @@ MonoBehaviour:
   topPanel: {fileID: 114267455684750236}
   UserName: Client
   LobbyName: 1
+  LobbyName1: {fileID: 114788113288123822}
+  UserName1: {fileID: 114065041143448534}
   mainMenuPanel: {fileID: 224677516932851056}
   lobbyPanel: {fileID: 224991583703164344}
   infoPanel: {fileID: 114271988271394624}

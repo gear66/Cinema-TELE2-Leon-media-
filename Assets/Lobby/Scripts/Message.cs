@@ -20,6 +20,6 @@ public class Message
     [JsonProperty("isResponse")]
     public bool isResponse { get; set; }
 
-    [JsonProperty("isRequset")]
-    public bool isRequset { get; set; }
+    [JsonProperty("isRequest")]
+    public bool isRequest { get; set; }
 }
