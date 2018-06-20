@@ -41,6 +41,8 @@ namespace Prototype.NetworkLobby
         public LobbyCountdownPanel countdownPanel;
         public GameObject addPlayerButton;
 
+        
+
         protected RectTransform currentPanel;
 
         public Button backButton;
@@ -327,6 +329,13 @@ namespace Prototype.NetworkLobby
             infoPanel.Display("Подождите, идет подключение к комнате...", null, () => { });
 
             requests["joinLobby"](payload);
+
+            Payload payload1 = new Payload();
+            payload1.user = user;
+            payload1.lobbyName = LobbyName1.text;
+            payload1.onlineVideo = true;
+
+            requests["toggleOnlineVideoConfirm"](payload1);
         }
 
         private void InitConnection()
@@ -354,6 +363,11 @@ namespace Prototype.NetworkLobby
                 }
             };
 
+            ws.OnClose += (sender, e) =>
+            {
+                ChangeTo(mainMenuPanel);
+            };
+
             ws.Connect();
 
             Message regMessage = new Message();
@@ -362,6 +376,7 @@ namespace Prototype.NetworkLobby
 
             string json = JsonConvert.SerializeObject(regMessage);
             ws.Send(json);
+
 
         }
 
