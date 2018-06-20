@@ -83,6 +83,9 @@ namespace Prototype.NetworkLobby
         public bool joinedLobbyError = false;
         public string joinedLobbyErrorMessage;
 
+        public bool connected = false;
+        public bool onConnect = false;
+
         private void Update()
         {
             if (startDemo)
@@ -91,6 +94,39 @@ namespace Prototype.NetworkLobby
                 engine = GameObject.Find("ENGINE");
                 engine.GetComponent<engineClient>().StartDemo();
                 startDemo = false;
+            }
+
+            if (onConnect)
+            {
+                onConnect = false;
+                connected = true;
+
+                User user = new User();
+                user.userName = UserName1.text;
+                user.userType = "Player";
+
+                Payload payload = new Payload();
+                payload.user = user;
+                payload.lobbyName = LobbyName1.text;
+
+
+                Message regMessage = new Message();
+                regMessage.payload = payload;
+                regMessage.command = "reg";
+
+                string json = JsonConvert.SerializeObject(regMessage);
+                ws.Send(json);
+
+                infoPanel.Display("Подождите, идет подключение к комнате...", null, () => { });
+
+                requests["joinLobby"](payload);
+
+                Payload payload1 = new Payload();
+                payload1.user = user;
+                payload1.lobbyName = LobbyName1.text;
+                payload1.onlineVideo = true;
+
+                requests["toggleOnlineVideoConfirm"](payload1);
             }
 
             if (diapasonSet)
@@ -227,6 +263,12 @@ namespace Prototype.NetworkLobby
                             joinedLobbyErrorMessage = message.error;
                         }
                     }
+                },
+                { "connect", (message) => {
+                        if (message.success) {
+                            onConnect = true;
+                        } 
+                    }
                 }
 
             };
@@ -310,34 +352,16 @@ namespace Prototype.NetworkLobby
             ws = new WebSocket("ws://localhost:8999");
             //ws = new WebSocket("ws://cinematele2.herokuapp.com/");
 
-            User user = new User();
-            user.userName = UserName1.text;
-            user.userType = "Player";
-
-            Payload payload = new Payload();
-            payload.user = user;
-            payload.lobbyName = LobbyName1.text;
-
+            
             InitConnection();
 
-            if (!ws.IsAlive)
-            {
-                infoPanel.Display("Сервер в данный момент не доступен",
-                    "Вернуться", () => { ChangeTo(mainMenuPanel); });
+            //if (!ws.IsAlive)
+            //{
+            //    infoPanel.Display("Сервер в данный момент не доступен",
+            //        "Вернуться", () => { ChangeTo(mainMenuPanel); });
 
-                return;
-            }
-
-            infoPanel.Display("Подождите, идет подключение к комнате...", null, () => { });
-
-            requests["joinLobby"](payload);
-
-            Payload payload1 = new Payload();
-            payload1.user = user;
-            payload1.lobbyName = LobbyName1.text;
-            payload1.onlineVideo = true;
-
-            requests["toggleOnlineVideoConfirm"](payload1);
+            //    return;
+            //}
         }
 
         private void InitConnection()
@@ -370,15 +394,7 @@ namespace Prototype.NetworkLobby
                 ChangeTo(mainMenuPanel);
             };
 
-            ws.Connect();
-
-            Message regMessage = new Message();
-            regMessage.payload = payload;
-            regMessage.command = "reg";
-
-            string json = JsonConvert.SerializeObject(regMessage);
-            ws.Send(json);
-
+            ws.ConnectAsync();
 
         }
 
