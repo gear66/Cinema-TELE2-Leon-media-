@@ -15,6 +15,7 @@ public class VideoPlayerInitializer : MonoBehaviour {
     public long frame;
     public long setFrame;
     public double time;
+    public double totalTime;
     public int isReadyStage = 0;
 
     // Use this for initialization
@@ -59,6 +60,12 @@ public class VideoPlayerInitializer : MonoBehaviour {
 
         frame = GetComponent<VideoPlayer>().frame;
         time = GetComponent<VideoPlayer>().time;
+        totalTime = GetComponent<VideoPlayer>().frameCount / GetComponent<VideoPlayer>().frameRate;
+        if (GetComponent<VideoPlayer>().clip != null)
+        {
+            //totalTime = GetComponent<VideoPlayer>().clip.length;
+            //totalTime = GetComponent<VideoPlayer>().frameCount;
+        } 
         if (t > 4.5 & flag)
         {
             gameObject.GetComponent<VideoPlayer>().Play();

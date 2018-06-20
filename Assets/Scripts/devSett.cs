@@ -13,12 +13,10 @@ public class devSett : MonoBehaviour
 {
 
     public string output;
-    //public Text playertextbox;
-
     string status;
     string wifiInfo;
-    public string state;
     public float t;
+    public float tt;
     public float check;
     public bool isActive = true;
     public bool isServer;
@@ -26,26 +24,30 @@ public class devSett : MonoBehaviour
     public GameObject engine;
     public float duration;
     public string vidStat;
+    public string currentState;
 
-    // Use this for initialization
     void Start()
     {
-        state = "";
         playerData.text = ("Статус:");
     }
-
-    //[SyncVar(hook = "OnMyData")]
-    //public string sunk2;
 
     void Update()
     {
         t += Time.deltaTime;
+        tt += Time.deltaTime;
         if (isActive)
         {
             duration = engine.GetComponent<engineClient>().duration;
+            if (tt > 1)
+            {
+                Payload payload = new Payload();
+                payload.duration = duration;
+                LobbyManager.requests["SendDuration"](payload);
+                currentState = engine.GetComponent<engineClient>().currentState;
+                tt = 0;
+            }
             if (t > 3)
             {
-                //check += 1;
                 check = engine.GetComponent<engineClient>().flag;
                 if (AGNetwork.IsInternetAvailable())
                 {
@@ -87,10 +89,10 @@ public class devSett : MonoBehaviour
                         vidStat = "Offline";
                     }
                     vidStat = engine.GetComponent<engineClient>().isReal.ToString();
-                    output = ("Battery: " + AGBattery.GetBatteryChargeLevel() + " | " + status + " | " + state + check.ToString() + " " + vidStat);
+
+                    output = ("Battery: " + AGBattery.GetBatteryChargeLevel() + " | " + status + " | " + currentState + check.ToString() + "c " + vidStat + " " + duration.ToString());
                     playerData.text = output;
-                    Debug.Log("Calling refresh data");
-                    Debug.Log(output);
+                    Debug.Log("Calling refresh data " + output);
 
                     Payload payload = new Payload();
                     payload.stateData = playerData.text;
@@ -106,5 +108,4 @@ public class devSett : MonoBehaviour
             }
         }
     }
-
 }
