@@ -21,7 +21,7 @@ public class devSett : MonoBehaviour
     public bool isActive = true;
     public bool isServer;
     public InputField playerData;
-    public GameObject engine;
+    
     public float duration;
     public string vidStat;
     public string currentState;
@@ -33,6 +33,7 @@ public class devSett : MonoBehaviour
 
     void Update()
     {
+        GameObject engine = LobbyManager.s_Singleton.engine;
         t += Time.deltaTime;
         tt += Time.deltaTime;
         if (isActive)
