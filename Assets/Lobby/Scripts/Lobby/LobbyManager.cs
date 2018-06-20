@@ -104,6 +104,16 @@ namespace Prototype.NetworkLobby
                 engine = GameObject.Find("ENGINE");
                 engine.GetComponent<engineClient>().OnlineVideo(onlineVideo);
                 toggling = false;
+
+                User user = new User();
+                user.userName = UserName1.text;
+                user.userType = "Player";
+
+                Payload payload = new Payload();
+                payload.user = user;
+                payload.lobbyName = LobbyName1.text;
+
+                requests["toggleOnlineVideoConfirm"](payload);
             }
 
             if (joinedLobby)
@@ -176,6 +186,15 @@ namespace Prototype.NetworkLobby
                         Debug.Log("Toggler called");
                         toggling = true;
                         onlineVideo = payload.onlineVideo;
+                    }
+                },
+                { "toggleOnlineVideoConfirm", (payload) => {
+                        Message message = new Message();
+                        message.payload = payload;
+                        message.command = "toggleOnlineVideoConfirm";
+
+                        string json = JsonConvert.SerializeObject(message);
+                        ws.Send(json);
                     }
                 },
                 { "onSpeedTest", (payload) => {
@@ -322,6 +341,7 @@ namespace Prototype.NetworkLobby
             payload.lobbyName = LobbyName;
 
             ws.OnMessage += (sender, e) => {
+                Debug.Log(e.Data);
                 Message message = JsonConvert.DeserializeObject<Message>(e.Data);
                 Debug.Log(message);
 
