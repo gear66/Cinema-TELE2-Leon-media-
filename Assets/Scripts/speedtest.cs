@@ -123,15 +123,15 @@ public class speedtest : MonoBehaviour {
                 rotSpeed = 1;
                 if (isReal)
                 {
-                    deltaSpeed = 0;
                     spedL.GetComponent<TextMesh>().text = deltaSpeed.ToString("0.0");
                     spedR.GetComponent<TextMesh>().text = deltaSpeed.ToString("0.0");
+                    deltaSpeed = 0;
                 }
                 else
                 {
-                    speed = 0;
                     spedL.GetComponent<TextMesh>().text = deltaSpeed.ToString("0.0");
                     spedR.GetComponent<TextMesh>().text = deltaSpeed.ToString("0.0");
+                    speed = 0;
                 }
                 engine.GetComponent<engineClient>().flag = 2;
                 localflag = 1;

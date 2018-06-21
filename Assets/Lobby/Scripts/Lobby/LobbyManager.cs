@@ -63,6 +63,8 @@ namespace Prototype.NetworkLobby
 
         protected bool _disconnectServer = false;
 
+        private bool onClose = false;
+
         protected ulong _currentMatchID;
 
         protected LobbyHook _lobbyHooks;
@@ -88,6 +90,13 @@ namespace Prototype.NetworkLobby
 
         private void Update()
         {
+            if (onClose)
+            {
+                infoPanel.Display("Вы были отключены от сервера! переподключитесь!", "ОК", null);
+                ChangeTo(mainMenuPanel);
+                onClose = false;
+            }
+
             if (startDemo)
             {
                 Debug.Log("GO DEMO");
@@ -356,14 +365,6 @@ namespace Prototype.NetworkLobby
 
 
             InitConnection();
-
-            //if (!ws.IsAlive)
-            //{
-            //    infoPanel.Display("Сервер в данный момент не доступен",
-            //        "Вернуться", () => { ChangeTo(mainMenuPanel); });
-
-            //    return;
-            //}
         }
 
         private void InitConnection()
@@ -393,12 +394,12 @@ namespace Prototype.NetworkLobby
 
             ws.OnClose += (sender, e) =>
             {
-                ChangeTo(mainMenuPanel);
+                onClose = true;
             };
 
             ws.ConnectAsync();
 
-            infoPanel.Display("Подключаемся к серверу...", "Оменить", null);
+            infoPanel.Display("Подключаемся к серверу...", "Отменить", null);
 
         }
 
