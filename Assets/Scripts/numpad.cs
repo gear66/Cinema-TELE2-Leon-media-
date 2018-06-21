@@ -54,23 +54,23 @@ public class numpad : MonoBehaviour
 
     public void PlusMin()
     {
-        speedoMeter.GetComponent<speedtest>().speedMin++;
+        speedoMeter.GetComponent<speedtest>().speedMinF++;
         min.text = speedoMeter.GetComponent<speedtest>().speedMin.ToString();
     }
     public void PlusMax()
     {
-        speedoMeter.GetComponent<speedtest>().speedMax++;
+        speedoMeter.GetComponent<speedtest>().speedMaxF++;
         max.text = speedoMeter.GetComponent<speedtest>().speedMax.ToString();
     }
 
     public void MinusMin()
     {
-        speedoMeter.GetComponent<speedtest>().speedMin--;
+        speedoMeter.GetComponent<speedtest>().speedMinF--;
         min.text = speedoMeter.GetComponent<speedtest>().speedMin.ToString();
     }
     public void MinusMax()
     {
-        speedoMeter.GetComponent<speedtest>().speedMax--;
+        speedoMeter.GetComponent<speedtest>().speedMaxF--;
         max.text = speedoMeter.GetComponent<speedtest>().speedMax.ToString();
     }
 }
