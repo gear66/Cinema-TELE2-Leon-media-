@@ -114,14 +114,14 @@ public class speedtest : MonoBehaviour {
                 if (isReal)
                 {
                     deltaSpeed = 0;
-                    spedL.GetComponent<TextMesh>().text = deltaSpeed.ToString();
-                    spedR.GetComponent<TextMesh>().text = deltaSpeed.ToString();
+                    spedL.GetComponent<TextMesh>().text = deltaSpeed.ToString("0.0");
+                    spedR.GetComponent<TextMesh>().text = deltaSpeed.ToString("0.0");
                 }
                 else
                 {
                     speed = 0;
-                    spedL.GetComponent<TextMesh>().text = (speedMax - 2).ToString();
-                    spedR.GetComponent<TextMesh>().text = (speedMax - 2).ToString();
+                    spedL.GetComponent<TextMesh>().text = deltaSpeed.ToString("0.0");
+                    spedR.GetComponent<TextMesh>().text = deltaSpeed.ToString("0.0");
                 }
                 engine.GetComponent<engineClient>().flag = 2;
                 localflag = 1;
@@ -164,7 +164,7 @@ public class speedtest : MonoBehaviour {
             watch.Stop();
         }
 
-        deltaSpeed = (float)(data.LongLength / watch.Elapsed.TotalSeconds / 100000f / 6f); // instead of [Seconds] property
+        deltaSpeed = (float)(data.LongLength / watch.Elapsed.TotalSeconds / 100000f /6f /2f); // instead of [Seconds] property
 
         log = (deltaSpeed.ToString("0"));
         //log = ("Speed: " + speed.ToString("N0") + "Мб/с" + Environment.NewLine);

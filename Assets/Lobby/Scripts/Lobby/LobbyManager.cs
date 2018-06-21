@@ -240,8 +240,8 @@ namespace Prototype.NetworkLobby
                 },
                 { "onSpeedTest", (payload) => {
                         Debug.Log("Setting diapason");
-                        min = payload.speedTest * 2;
-                        max = payload.speedTest * 2 + 2;
+                        min = payload.speedTest;
+                        max = payload.speedTest + 2;
                         diapasonSet = true;
                     }
                 },

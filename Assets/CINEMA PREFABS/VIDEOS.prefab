@@ -5955,6 +5955,7 @@ MonoBehaviour:
   frame: 0
   setFrame: 0
   time: 0
+  totalTime: 0
   isReadyStage: 0
 --- !u!114 &114073159054232426
 MonoBehaviour:
@@ -6126,6 +6127,7 @@ MonoBehaviour:
   frame: 0
   setFrame: 0
   time: 0
+  totalTime: 0
   isReadyStage: 0
 --- !u!114 &114223320073227718
 MonoBehaviour:
@@ -6397,6 +6399,7 @@ MonoBehaviour:
   frame: 0
   setFrame: 0
   time: 0
+  totalTime: 0
   isReadyStage: 0
 --- !u!114 &114527623252758814
 MonoBehaviour:
@@ -6432,7 +6435,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   t: 0
-  time: 4
+  time: 6
 --- !u!114 &114551743722531190
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6449,6 +6452,7 @@ MonoBehaviour:
   frame: 0
   setFrame: 0
   time: 0
+  totalTime: 0
   isReadyStage: 0
 --- !u!114 &114567479004095462
 MonoBehaviour:
@@ -6466,6 +6470,7 @@ MonoBehaviour:
   frame: 0
   setFrame: 0
   time: 0
+  totalTime: 0
   isReadyStage: 0
 --- !u!114 &114574925018477762
 MonoBehaviour:
@@ -6550,6 +6555,7 @@ MonoBehaviour:
   frame: 0
   setFrame: 0
   time: 0
+  totalTime: 0
   isReadyStage: 0
 --- !u!114 &114661046414018718
 MonoBehaviour:
@@ -6567,6 +6573,7 @@ MonoBehaviour:
   frame: 0
   setFrame: 0
   time: 0
+  totalTime: 0
   isReadyStage: 0
 --- !u!114 &114666898731145212
 MonoBehaviour:
@@ -6609,6 +6616,7 @@ MonoBehaviour:
   frame: 0
   setFrame: 0
   time: 0
+  totalTime: 0
   isReadyStage: 0
 --- !u!114 &114690611484642346
 MonoBehaviour:
@@ -6658,6 +6666,7 @@ MonoBehaviour:
   frame: 0
   setFrame: 0
   time: 0
+  totalTime: 0
   isReadyStage: 0
 --- !u!114 &114711605458380294
 MonoBehaviour:
@@ -6915,6 +6924,7 @@ MonoBehaviour:
   frame: 0
   setFrame: 0
   time: 0
+  totalTime: 0
   isReadyStage: 0
 --- !u!114 &114956401085260518
 MonoBehaviour:

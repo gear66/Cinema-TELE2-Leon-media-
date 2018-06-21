@@ -83,15 +83,15 @@ public class devSett : MonoBehaviour
                 {
                     if (engine.GetComponent<engineClient>().isReal)
                     {
-                        vidStat = "Online";
+                        //vidStat = "Online";
                     }
                     else
                     {
-                        vidStat = "Offline";
+                        //vidStat = "Offline";
                     }
                     vidStat = engine.GetComponent<engineClient>().isReal.ToString();
 
-                    output = ("Battery: " + AGBattery.GetBatteryChargeLevel() + " | " + status + " | " + currentState + " " + vidStat + " " + duration.ToString());
+                    output = ("Battery: " + AGBattery.GetBatteryChargeLevel() + " | " + status + " | " + currentState + " | " + duration.ToString());
                     playerData.text = output;
                     Debug.Log("Calling refresh data " + output);
 
