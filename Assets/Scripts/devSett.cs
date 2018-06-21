@@ -72,6 +72,10 @@ public class devSett : MonoBehaviour
                             }
                         }
                     }
+                    else
+                    {
+                        status = "4G";
+                    }
                     //connection.text = ("Тип соединения: " + status + wifiInfo);
                 }
                 else

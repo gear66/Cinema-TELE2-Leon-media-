@@ -30,7 +30,9 @@ public class speedtest : MonoBehaviour {
     public int localflag = 0;
 
     public float speedMin;
+    public float speedMinF;
     public float speedMax;
+    public float speedMaxF;
     public float circleSpeed;
 
     float s; // начальное положение стрелки по оси Z
@@ -50,10 +52,8 @@ public class speedtest : MonoBehaviour {
 
     // Use this for initialization
 
-    void Start () {
-        //arrow.localRotation = Quaternion.Euler(0, 0, _start);
-        //speedMin = PlayerPrefs.GetFloat("SpeedMin", 20f);
-        //speedMax = PlayerPrefs.GetFloat("SpeedMax", 25f);
+    void Start ()
+    {
         rotst = arrow.transform.localRotation;
         rotSpeed = 0.5f;
     }
@@ -67,7 +67,6 @@ public class speedtest : MonoBehaviour {
         arrowL.transform.localRotation = rot;
         aR.transform.localRotation = brot;
         aL.transform.localRotation = brot;
-        //aL.transform.localRotation = rot;
         if (isactive)
         {
             ttt += Time.deltaTime;
@@ -75,17 +74,29 @@ public class speedtest : MonoBehaviour {
             t += Time.deltaTime;
             if (isReal)
             {
-                if (t > 1 && gg <= 6)
+                deltaSpeed = Mathf.Lerp(deltaSpeed, speed, rotSpeed * Time.deltaTime);
+                circleSpeed = circleL.fillAmount = (deltaSpeed * (360f / 40f)) / 360 + 0.095f;
+                circleR.fillAmount = circleSpeed;
+                if (t > 0.5f & localflag == 0)
                 {
-                    deltaSpeed = Mathf.Lerp(deltaSpeed, speed, rotSpeed * Time.deltaTime);
-                    circleSpeed = circleL.fillAmount = (deltaSpeed * (360f / 40f)) / 360 + 0.095f;
-                    circleR.fillAmount = circleSpeed;
-                    StartCoroutine(SpeedTestt());
-                    //StartCoroutine(CallWebPage());
-                    UnityEngine.Debug.Log("T started");
+                    speed = UnityEngine.Random.Range(speedMin, speedMax);
+                    log = deltaSpeed.ToString("0");
+                    //Environment.NewLine
+                    textboxobj.GetComponent<TextMesh>().text = log;
+                    textboxobjL.GetComponent<TextMesh>().text = log;
                     t = 0;
-                    gg++;
                 }
+                //if (t > 1 && gg <= 6)
+                //{
+                //    deltaSpeed = Mathf.Lerp(deltaSpeed, speed, rotSpeed * Time.deltaTime);
+                //    circleSpeed = circleL.fillAmount = (deltaSpeed * (360f / 40f)) / 360 + 0.095f;
+                //    circleR.fillAmount = circleSpeed;
+                //    StartCoroutine(SpeedTestt());
+                //    //StartCoroutine(CallWebPage());
+                //    UnityEngine.Debug.Log("T started");
+                //    t = 0;
+                //    gg++;
+                //}
             }
             else
             {
@@ -94,9 +105,8 @@ public class speedtest : MonoBehaviour {
                 circleR.fillAmount = circleSpeed;
                 if (t > 0.5f & localflag ==0)
                 {
-                    speed = UnityEngine.Random.Range(speedMin, speedMax);
+                    speed = UnityEngine.Random.Range(speedMinF, speedMaxF);
                     log = deltaSpeed.ToString("0");
-                    //Environment.NewLine
                     textboxobj.GetComponent<TextMesh>().text = log;
                     textboxobjL.GetComponent<TextMesh>().text = log;
                     t = 0;
