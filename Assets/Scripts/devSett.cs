@@ -21,6 +21,7 @@ public class devSett : MonoBehaviour
     public bool isActive = true;
     public bool isServer;
     public InputField playerData;
+    public string durString;
     
     public float duration;
     public string vidStat;
@@ -39,6 +40,7 @@ public class devSett : MonoBehaviour
         if (isActive)
         {
             duration = engine.GetComponent<engineClient>().duration;
+            durString = string.Format("{0}:{1:00}", (int)duration / 60, (int)duration % 60);
             if (tt > 1)
             {
                 Payload payload = new Payload();
@@ -95,7 +97,7 @@ public class devSett : MonoBehaviour
                     }
                     vidStat = engine.GetComponent<engineClient>().isReal.ToString();
 
-                    output = ("Battery: " + AGBattery.GetBatteryChargeLevel() + " | " + status + " | " + currentState + " | " + duration.ToString());
+                    output = ("Battery: " + AGBattery.GetBatteryChargeLevel() + " | " + status + " | " + currentState + " | " + durString);
                     playerData.text = output;
                     Debug.Log("Calling refresh data " + output);
 

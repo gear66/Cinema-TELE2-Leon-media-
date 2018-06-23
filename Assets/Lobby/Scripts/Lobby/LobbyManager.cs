@@ -143,8 +143,8 @@ namespace Prototype.NetworkLobby
             if (diapasonSet)
             {
                 Debug.Log("Setting diapason");
-                numpad.GetComponent<speedtest>().speedMin = min;
-                numpad.GetComponent<speedtest>().speedMax = max;
+                numpad.GetComponent<speedtest>().speedMinF = min;
+                numpad.GetComponent<speedtest>().speedMaxF = max;
                 diapasonSet = false;
             }
 

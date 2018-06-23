@@ -79,9 +79,9 @@ public class speedtest : MonoBehaviour {
                 circleR.fillAmount = circleSpeed;
                 if (t > 0.5f & localflag == 0)
                 {
-                    speed = UnityEngine.Random.Range(speedMin, speedMax);
+                    speed = UnityEngine.Random.Range(speedMinF, speedMaxF);
                     log = deltaSpeed.ToString("0");
-                    //Environment.NewLine
+
                     textboxobj.GetComponent<TextMesh>().text = log;
                     textboxobjL.GetComponent<TextMesh>().text = log;
                     t = 0;
@@ -105,7 +105,7 @@ public class speedtest : MonoBehaviour {
                 circleR.fillAmount = circleSpeed;
                 if (t > 0.5f & localflag ==0)
                 {
-                    speed = UnityEngine.Random.Range(speedMinF, speedMaxF);
+                    speed = UnityEngine.Random.Range(speedMin, speedMax);
                     log = deltaSpeed.ToString("0");
                     textboxobj.GetComponent<TextMesh>().text = log;
                     textboxobjL.GetComponent<TextMesh>().text = log;
@@ -123,15 +123,15 @@ public class speedtest : MonoBehaviour {
                 rotSpeed = 1;
                 if (isReal)
                 {
+                    speed = 0;
                     spedL.GetComponent<TextMesh>().text = deltaSpeed.ToString("0.0");
                     spedR.GetComponent<TextMesh>().text = deltaSpeed.ToString("0.0");
-                    deltaSpeed = 0;
                 }
                 else
                 {
+                    speed = 0;
                     spedL.GetComponent<TextMesh>().text = deltaSpeed.ToString("0.0");
                     spedR.GetComponent<TextMesh>().text = deltaSpeed.ToString("0.0");
-                    speed = 0;
                 }
                 engine.GetComponent<engineClient>().flag = 2;
                 localflag = 1;

@@ -73,7 +73,7 @@ public class VideoController : MonoBehaviour
 
     void Update()
     {
-        engine.GetComponent<engineClient>().duration = totalVideoDuration - currentVideoDuration;
+        //engine.GetComponent<engineClient>().duration = totalVideoDuration - currentVideoDuration;
         if (sourceVideo.isPlaying && progressSlider != null)
         {
             totalVideoDuration = Mathf.RoundToInt(sourceVideo.frameCount / sourceVideo.frameRate);

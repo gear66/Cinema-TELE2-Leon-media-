@@ -22,6 +22,7 @@ public class HighQualityPlayback : MonoBehaviour {
 	//start playing the video
 	public bool playOnStart = false;
     bool desyncFlag = true;
+    public float totalTime;
 
     public GameObject splashScreen;
     public GameObject engine;
@@ -261,7 +262,9 @@ public class HighQualityPlayback : MonoBehaviour {
 			}
 		}
 
-		if (checkIfVideoArePrepared) {
+        totalTime = GetComponent<VideoPlayer>().frameCount / GetComponent<VideoPlayer>().frameRate;
+
+        if (checkIfVideoArePrepared) {
             checkIfVideoArePrepared = false;
 			videoPrepared = false;
 			unityVideoPlayer.prepareCompleted += VideoPrepared;

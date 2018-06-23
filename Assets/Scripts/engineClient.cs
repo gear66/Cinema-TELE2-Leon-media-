@@ -1,4 +1,5 @@
 ﻿using Prototype.NetworkLobby;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,7 @@ public class engineClient : MonoBehaviour {
     bool ok;
     public string currentState;
     int vidNum;
+    TimeSpan time;
 
     [Header("Videos:")]
     public GameObject[] videoss;
@@ -206,7 +208,8 @@ public class engineClient : MonoBehaviour {
             }
             if (currentVideo != null)
             {
-                duration = (float)currentVideo.GetComponent<VideoPlayer>().time;
+                duration = currentVideo.GetComponent<HighQualityPlayback>().totalTime - (float)currentVideo.GetComponent<VideoPlayer>().time;
+                // = TimeSpan.FromSeconds(currentVideo.GetComponent<HighQualityPlayback>().totalTime - (float)currentVideo.GetComponent<VideoPlayer>().time);
             }
             else if (currentVideoLocal != null)
             {
@@ -274,7 +277,15 @@ public class engineClient : MonoBehaviour {
             currentVideo = Instantiate(videossOnline[i - 1]);
             currentVideo.SetActive(true);
             Debug.Log("Video "+ i +" online instantiated vvv");
-            currentState = "Watch " + i.ToString();
+            if (i > 2)
+            {
+                currentState = "Watch " + (i-2).ToString();
+            }
+            else
+            {
+                currentState = "Watch " + (i+8).ToString();
+            }
+
         }
         else
         {
@@ -282,12 +293,20 @@ public class engineClient : MonoBehaviour {
             currentVideoLocal.SetActive(true);
             currentVideoLocal.GetComponent<VideoPlayerInitializer>().setFrame = 0;
             Debug.Log("Video " + i + " offline instantiated vvv");
-            currentState = "Watch " + i.ToString();
+            if (i > 2)
+            {
+                currentState = "Watch " + (i - 2).ToString();
+            }
+            else
+            {
+                currentState = "Watch " + (i + 8).ToString();
+            }
         }
     }
 
     public void GoCinema()
     {
+        duration = 0;
         indicator.SetActive(false);
         if (currentVideo != null)
         {

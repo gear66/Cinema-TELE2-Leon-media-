@@ -3135,7 +3135,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1811156393160482
 GameObject:
   m_ObjectHideFlags: 1
@@ -14761,7 +14761,9 @@ MonoBehaviour:
   engine: {fileID: 0}
   localflag: 0
   speedMin: 20
+  speedMinF: 5
   speedMax: 25
+  speedMaxF: 10
   circleSpeed: 0
   arrowL: {fileID: 1513037996599274}
   arrow: {fileID: 1949358008676644}
