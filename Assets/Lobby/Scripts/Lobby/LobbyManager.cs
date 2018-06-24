@@ -77,6 +77,9 @@ namespace Prototype.NetworkLobby
 
         public float min;
         public float max;
+
+        public float t5s;
+
         public bool diapasonSet = false;
         public bool toggling = false;
         public bool onlineVideo = true;
@@ -88,12 +91,46 @@ namespace Prototype.NetworkLobby
         public bool connected = false;
         public bool onConnect = false;
 
+        public bool disconnect = false;
+        public bool manualDisconnected = true;
+        public bool reconnecting = false;
+        public bool repeatConnect = false;
+
         private void Update()
         {
+            t5s += Time.deltaTime;
+            if (reconnecting)
+            {
+                if (t5s > 5)
+                {
+                    ws.ConnectAsync();
+                    t5s = 0;
+                }
+            }
+
+            if (disconnect)
+            {
+                infoPanel.Display("Администратор выключил сервер, вы отключены", "ОК", null);
+                ChangeTo(mainMenuPanel);
+                disconnect = false;
+                manualDisconnected = true;
+                ws.Close();
+                manualDisconnected = false;
+            }
+
             if (onClose)
             {
-                infoPanel.Display("Вы были отключены от сервера! переподключитесь!", "ОК", null);
-                ChangeTo(mainMenuPanel);
+                if (!repeatConnect && connected)
+                {
+                    infoPanel.Display("Вы были отключены от сервера! переподключитесь!", "ОК", null);
+                    ChangeTo(mainMenuPanel);
+
+                    if (!manualDisconnected)
+                    {
+                        infoPanel.Display("Производятся попытки переподключения", "ОК", null);
+                        reconnecting = true;
+                    }
+                }
                 onClose = false;
             }
 
@@ -108,7 +145,8 @@ namespace Prototype.NetworkLobby
             if (onConnect)
             {
                 onConnect = false;
-                connected = true;
+                reconnecting = false;
+                repeatConnect = false;
 
                 infoPanel.gameObject.SetActive(false);
 
@@ -170,6 +208,8 @@ namespace Prototype.NetworkLobby
             {
                 ConnectedToLobby();
                 joinedLobby = false;
+                manualDisconnected = false;
+                connected = true;
             }
 
             if (joinedLobbyError)
@@ -261,6 +301,10 @@ namespace Prototype.NetworkLobby
 
                         string json = JsonConvert.SerializeObject(message);
                         ws.Send(json);
+                    }
+                },
+                {"disconnect", (payload) => {
+                        disconnect = true;
                     }
                 }
             };
@@ -360,8 +404,13 @@ namespace Prototype.NetworkLobby
         public void ConnectToLobby()
         {
 
-            //ws = new WebSocket("ws://localhost:8999");
-            ws = new WebSocket("ws://cinematele2.herokuapp.com/");
+            if (ws != null)
+            {
+                repeatConnect = true;
+                ws.Close();
+            }
+            ws = new WebSocket("ws://localhost:8999");
+            //ws = new WebSocket("ws://cinematele2.herokuapp.com/");
 
 
             InitConnection();
@@ -397,7 +446,8 @@ namespace Prototype.NetworkLobby
                 onClose = true;
             };
 
-            ws.ConnectAsync();
+            repeatConnect = true;
+            reconnecting = true;
 
             infoPanel.Display("Подключаемся к серверу...", "Отменить", null);
 
