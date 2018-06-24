@@ -306,9 +306,11 @@ MonoBehaviour:
   isWatchEnded: 0
   isReal: 1
   flag: 0
+  set: 0
+  setVid: 0
   duration: 0
   t: 5
-  cinemaEnv: {fileID: 0}
+  currentState: 
   videoss:
   - {fileID: 0}
   - {fileID: 0}
@@ -331,13 +333,16 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  onlineVid: {fileID: 0}
+  offlineVid: {fileID: 0}
+  currentVideo: {fileID: 0}
+  currentVideoLocal: {fileID: 0}
   vidPrefab: {fileID: 0}
+  splash: {fileID: 0}
   gazee: {fileID: 0}
   pointer: {fileID: 0}
-  browBlock: {fileID: 0}
   player: {fileID: 0}
-  splash: {fileID: 0}
-  buttons: {fileID: 0}
+  cinemaEnv: {fileID: 0}
   leftScrMat: {fileID: 0}
   leftScrMatL: {fileID: 0}
   prerollMat: {fileID: 0}
@@ -352,13 +357,16 @@ MonoBehaviour:
   watch4g: {fileID: 8300000, guid: 20a5eb29109bba340a0afb40fdfda464, type: 3}
   end3g: {fileID: 8300000, guid: 2f32fc361d984344e9ebce7dd54cb7d8, type: 3}
   end4g: {fileID: 8300000, guid: e26e328cda1037745b2f5d5d225275f9, type: 3}
+  browBlock: {fileID: 0}
   browserColl2: {fileID: 0}
+  buttons: {fileID: 0}
+  indicator: {fileID: 0}
   buttOnline: {fileID: 0}
   buttOffline: {fileID: 0}
-  onlineVid: {fileID: 0}
-  offlineVid: {fileID: 0}
-  videoz: {fileID: 0}
-  currentVideo: {fileID: 0}
+  buttBanner3g: {fileID: 0}
+  buttBanner4g: {fileID: 0}
+  curTime: 0
+  curFrame: 0
 --- !u!114 &114460708956378336
 MonoBehaviour:
   m_ObjectHideFlags: 1
