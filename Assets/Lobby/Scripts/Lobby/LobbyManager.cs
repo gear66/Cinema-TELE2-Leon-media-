@@ -147,6 +147,7 @@ namespace Prototype.NetworkLobby
                 onConnect = false;
                 reconnecting = false;
                 repeatConnect = false;
+                manualDisconnected = false;
 
                 infoPanel.gameObject.SetActive(false);
 
@@ -216,6 +217,10 @@ namespace Prototype.NetworkLobby
             {
                 infoPanel.Display(joinedLobbyErrorMessage, "Вернуться", null);
                 joinedLobbyError = false;
+                if (!manualDisconnected)
+                {
+                    reconnecting = true;
+                }
             }
         }
 
@@ -409,7 +414,8 @@ namespace Prototype.NetworkLobby
                 repeatConnect = true;
                 ws.Close();
             }
-            ws = new WebSocket("ws://localhost:8999");
+            //ws = new WebSocket("ws://localhost:8999");
+            ws = new WebSocket("ws://91.201.53.171:8999");
             //ws = new WebSocket("ws://cinematele2.herokuapp.com/");
 
 
